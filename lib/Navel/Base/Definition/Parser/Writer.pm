@@ -9,7 +9,8 @@ package Navel::Base::Definition::Parser::Writer 0.1;
 
 use Navel::Base;
 
-use AnyEvent::IO;
+use AnyEvent::AIO;
+use IO::AIO;
 
 use Navel::Utils qw/
     croak
@@ -48,7 +49,7 @@ sub write {
                         if (@_) {
                             my $serialized_definitions = encode_yaml($options{definitions});
 
-                            aio_write($filehandle, $serialized_definitions,
+                            aio_write($filehandle, undef, (length $serialized_definitions), $serialized_definitions, 0,
                                 sub {
                                     if (shift == length $serialized_definitions) {
                                         $options{on_success}->($self->{file_path});

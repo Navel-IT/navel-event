@@ -38,7 +38,8 @@ WriteMakefile(
         'Navel::API' => 0,
         'Mojo::URL' => 0,
         'JSON::Validator' => 0,
-        'AnyEvent::IO' => 0
+        'AnyEvent::AIO' => 0,
+        'IO::AIO' => 0
     },
     TEST_REQUIRES => {
         'Test::More' => 0,
