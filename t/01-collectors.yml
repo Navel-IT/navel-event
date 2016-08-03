@@ -1,0 +1,9 @@
+---
+  -
+    name: test-1
+    collection: test
+    async: 0
+    scheduling: 5
+    execution_timeout: 0
+    backend: Navel::Collector::Test
+    backend_input: ~
