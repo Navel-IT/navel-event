@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 
-use ExtUtils::MakeMaker 6.64;
+use ExtUtils::MakeMaker;
 
 #-> main
 
@@ -40,6 +40,9 @@ WriteMakefile(
         'JSON::Validator' => 0,
         'AnyEvent::AIO' => 0,
         'IO::AIO' => 0
+    },
+    CONFIGURE_REQUIRES => {
+        'ExtUtils::MakeMaker' => 6.64
     },
     TEST_REQUIRES => {
         'Test::More' => 0,
