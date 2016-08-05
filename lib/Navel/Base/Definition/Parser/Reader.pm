@@ -27,8 +27,14 @@ sub read {
     local $@;
 
     my $deserialized = eval {
+        local $!;
+
+        my $file_content = path($self->{file_path})->slurp();
+
+        die $! if $!;
+
         decode_yaml(
-            path($self->{file_path})->slurp()
+            $file_content
         );
     };
 
