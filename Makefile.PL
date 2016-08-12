@@ -32,11 +32,7 @@ WriteMakefile(
     MIN_PERL_VERSION => $min_perl_version,
     PREREQ_PM => {
         'Navel::Base' => 0,
-        'Navel::API' => 0,
-        'Mojo::URL' => 0,
-        'JSON::Validator' => 0,
-        'AnyEvent::AIO' => 0,
-        'IO::AIO' => 0
+        'Navel::Definition::Collector' => 0
     },
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => 6.64

@@ -1,5 +1,5 @@
 # Copyright (C) 2015 Yoann Le Garff, Nicolas Boquet and Yann Le Bras
-# navel-base is licensed under the Apache License, Version 2.0
+# navel-event is licensed under the Apache License, Version 2.0
 
 #-> BEGIN
 
@@ -97,6 +97,6 @@ Copyright (C) 2015 Yoann Le Garff, Nicolas Boquet and Yann Le Bras
 
 =head1 LICENSE
 
-navel-base is licensed under the Apache License, Version 2.0
+navel-event is licensed under the Apache License, Version 2.0
 
 =cut
