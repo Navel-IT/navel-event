@@ -17,7 +17,7 @@ use Navel::Utils qw/
     blessed
     isint
  /;
- 
+
 #-> class variables
 
 my $decode_sereal_constructor = decode_sereal_constructor();
@@ -31,35 +31,24 @@ sub deserialize {
 
     return $deserialized if blessed($deserialized) && $deserialized->isa(__PACKAGE__);
 
-    local $@;
-
-    eval {
-        $deserialized->{collector} = Navel::Definition::Collector->new($deserialized->{collector});
-    };
-
-    my $event = eval {
-        $class->new(%{$deserialized});
-    };
-
-    croak($@) if $@;
-
-    $event;
+    $class->new(%{$deserialized});
 }
 
 sub new {
     my ($class, %options) = @_;
 
-    my $self = bless {
-    }, ref $class || $class;
+    my $self = {};
 
     if (blessed($options{collector}) && $options{collector}->isa('Navel::Definition::Collector')) {
         $self->{collector} = $options{collector};
-        $self->{collection} = $self->{collector}->{collection};
     } else {
-        die "collection must be defined\n" unless defined $options{collection};
+        local $@;
 
-        $self->{collector} = undef;
-        $self->{collection} = sprintf '%s', $options{collection};
+        eval {
+            $self->{collector} = Navel::Definition::Collector->new($options{collector});
+        };
+
+        croak($@) if $@;
     }
 
     $self->{status} = blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new($options{status});
@@ -68,7 +57,7 @@ sub new {
 
     $self->{time} = isint($options{time}) ? $options{time} : time;
 
-    $self;
+    bless $self, ref $class || $class;
 }
 
 sub serialize {

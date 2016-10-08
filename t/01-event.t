@@ -21,7 +21,17 @@ my $event;
 
 lives_ok {
     $event = Navel::Event->new(
-        collection => 'test'
+        collector => {
+            name => 'test-1',
+            collection => 'test',
+            backend => 'Navel::Collector::Test',
+            backend_input => undef,
+            publisher => {
+                backend => 'Navel::Broker::Client::Fork::Publisher::Backend::Test',
+                backend_input => undef,
+                auto_clean => 0
+            }
+        }
     );
 } 'making the event';
 

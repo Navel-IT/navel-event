@@ -17,8 +17,7 @@ use Navel::Utils qw/
 #-> class variables
 
 my %status = (
-    std => 0,
-    itl => -1
+    std => 0
 );
 
 #-> methods
