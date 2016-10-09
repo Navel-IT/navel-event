@@ -24,13 +24,11 @@ lives_ok {
         collector => {
             name => 'test-1',
             collection => 'test',
+            queue_auto_clean => 0,
             backend => 'Navel::Collector::Test',
             backend_input => undef,
-            publisher => {
-                backend => 'Navel::Broker::Client::Fork::Publisher::Backend::Test',
-                backend_input => undef,
-                auto_clean => 0
-            }
+            publisher_backend => 'Navel::Broker::Client::Fork::Publisher::Backend::Test',
+            publisher_backend_input => undef
         }
     );
 } 'making the event';
