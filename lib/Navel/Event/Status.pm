@@ -28,7 +28,7 @@ sub status {
     ];
 }
 
-sub integer_to_status_key {
+sub integer_to_label {
     my ($class, $integer) = @_;
 
     croak('status must be an integer') unless isint($integer);
@@ -60,7 +60,7 @@ sub set_status {
     my ($self, $status) = @_;
 
     if (isint($status)) {
-        $status = $self->integer_to_status_key($status);
+        $status = $self->integer_to_label($status);
 
         die "invalid status\n" unless defined $status;
     } else {

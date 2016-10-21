@@ -16,9 +16,6 @@ before_install:
       }
   - pushd ..
   - f_install_navel_dep navel-base
-  - f_install_navel_dep navel-base-definition
-  - f_install_navel_dep navel-api
-  - f_install_navel_dep navel-definition-collector
   - popd
   - cpanm --quiet --notest Devel::Cover::Report::Coveralls
 after_success:

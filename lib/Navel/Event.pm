@@ -9,7 +9,13 @@ package Navel::Event 0.1;
 
 use Navel::Base;
 
-use Navel::Definition::Collector;
+use constant {
+    I_STATUS => 0,
+    I_TIME => 1,
+    I_COLLECTION => 2,
+    I_DATA => 3
+};
+
 use Navel::Event::Status;
 use Navel::Utils qw/
     croak
@@ -27,41 +33,40 @@ my $encode_sereal_constructor = encode_sereal_constructor();
 #-> methods
 
 sub deserialize {
-    my ($class, $deserialized) = (shift, $decode_sereal_constructor->decode(shift));
+    my ($class, $event) = (shift, $decode_sereal_constructor->decode(shift));
 
-    return $deserialized if blessed($deserialized) && $deserialized->isa(__PACKAGE__);
+    croak('event must be a array') unless ref $event eq 'ARRAY';
 
-    $class->new(%{$deserialized});
+    $class->new(
+        status => $event->[I_STATUS],
+        time => $event->[I_TIME],
+        collection => $event->[I_COLLECTION],
+        data => $event->[I_DATA]
+    );
 }
 
 sub new {
     my ($class, %options) = @_;
 
-    my $self = {};
-
-    if (blessed($options{collector}) && $options{collector}->isa('Navel::Definition::Collector')) {
-        $self->{collector} = $options{collector};
-    } else {
-        local $@;
-
-        eval {
-            $self->{collector} = Navel::Definition::Collector->new($options{collector});
-        };
-
-        croak($@) if $@;
-    }
-
-    $self->{status} = blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new($options{status});
-
-    $self->{data} = $options{data};
-
-    $self->{time} = isint($options{time}) ? $options{time} : time;
-
-    bless $self, ref $class || $class;
+    bless {
+        status => blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new($options{status}),
+        time => isint($options{time}) ? $options{time} : time,
+        collection => length $options{collection} ? $options{collection} : croak('collection length must be superior to 0'),
+        data => $options{data}
+    }, ref $class || $class;
 }
 
 sub serialize {
-    $encode_sereal_constructor->encode(shift);
+    my $self = shift;
+
+    my @event;
+
+    $event[I_STATUS] = $self->{status}->{status};
+    $event[I_TIME] = $self->{time};
+    $event[I_COLLECTION] = $self->{collection};
+    $event[I_DATA] = $self->{data};
+
+    $encode_sereal_constructor->encode(\@event);
 }
 
 # sub AUTOLOAD {}
