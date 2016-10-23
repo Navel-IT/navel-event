@@ -49,7 +49,7 @@ sub new {
     my ($class, %options) = @_;
 
     bless {
-        status => blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new($options{status}),
+        status => blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new(delete $options{status}),
         time => isint($options{time}) ? $options{time} : time,
         collection => length $options{collection} ? $options{collection} : croak('collection length must be superior to 0'),
         data => $options{data}
@@ -61,7 +61,7 @@ sub serialize {
 
     my @event;
 
-    $event[I_STATUS] = $self->{status}->{status};
+    $event[I_STATUS] = $self->{status}->{value};
     $event[I_TIME] = $self->{time};
     $event[I_COLLECTION] = $self->{collection};
     $event[I_DATA] = $self->{data};

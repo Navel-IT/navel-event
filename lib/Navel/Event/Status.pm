@@ -16,58 +16,52 @@ use Navel::Utils qw/
 
 #-> class variables
 
-my %status = (
+our %STATUS = (
     std => 0
 );
 
 #-> methods
 
-sub status {
-    [
-        keys %status
-    ];
-}
+sub reverse {
+    my ($class, $value) = @_;
 
-sub integer_to_label {
-    my ($class, $integer) = @_;
+    croak('value must be an integer') unless isint($value);
 
-    croak('status must be an integer') unless isint($integer);
+    my $label;
 
-    my $status;
-
-    for (keys %status) {
-        if ($integer == $status{$_}) {
-            $status = $_;
+    for (keys %STATUS) {
+        if ($value == $STATUS{$_}) {
+            $label = $_;
 
             last;
         }
     }
 
-    $status;
+    $label;
 }
 
 sub new {
-    my ($class, $status) = @_;
+    my ($class, $value) = @_;
 
     my $self = bless {}, ref $class || $class;
 
-    $self->set_status(defined $status ? $status : $status{std});
+    $self->set(defined $value ? $value : $STATUS{std});
 
     $self;
 }
 
-sub set_status {
-    my ($self, $status) = @_;
+sub set {
+    my ($self, $value) = @_;
 
-    if (isint($status)) {
-        $status = $self->integer_to_label($status);
+    if (isint($value)) {
+        $value = $self->reverse($value);
 
-        die "invalid status\n" unless defined $status;
+        die "invalid status\n" unless defined $value;
     } else {
-        die "invalid status\n" unless defined $status && exists $status{$status};
+        die "invalid status\n" unless defined $value && exists $STATUS{$value};
     }
 
-    $self->{status} = $status{$status};
+    $self->{value} = $STATUS{$value};
 
     $self;
 }
