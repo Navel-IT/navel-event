@@ -26,7 +26,7 @@ lives_ok {
 } 'making the event';
 
 lives_ok {
-    $event->deserialize($event->serialize());
+    $event->deserialize($event->serialize);
 } 'serialize and deserialize the event';
 
 #-> END

@@ -26,9 +26,9 @@ use Navel::Utils qw/
 
 #-> class variables
 
-my $decode_sereal_constructor = decode_sereal_constructor();
+my $decode_sereal_constructor = decode_sereal_constructor;
 
-my $encode_sereal_constructor = encode_sereal_constructor();
+my $encode_sereal_constructor = encode_sereal_constructor;
 
 #-> methods
 
