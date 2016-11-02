@@ -12,7 +12,7 @@ use Navel::Base;
 use constant {
     I_STATUS => 0,
     I_TIME => 1,
-    I_COLLECTION => 2,
+    I_CLASS => 2,
     I_DATA => 3
 };
 
@@ -40,7 +40,7 @@ sub deserialize {
     $class->new(
         status => $event->[I_STATUS],
         time => $event->[I_TIME],
-        collection => $event->[I_COLLECTION],
+        class => $event->[I_CLASS],
         data => $event->[I_DATA]
     );
 }
@@ -51,7 +51,7 @@ sub new {
     bless {
         status => blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new(delete $options{status}),
         time => isint($options{time}) ? $options{time} : time,
-        collection => length $options{collection} ? $options{collection} : croak('collection length must be superior to 0'),
+        class => $options{class},
         data => $options{data}
     }, ref $class || $class;
 }
@@ -63,7 +63,7 @@ sub serialize {
 
     $event[I_STATUS] = $self->{status}->{value};
     $event[I_TIME] = $self->{time};
-    $event[I_COLLECTION] = $self->{collection};
+    $event[I_CLASS] = $self->{class};
     $event[I_DATA] = $self->{data};
 
     $encode_sereal_constructor->encode(\@event);

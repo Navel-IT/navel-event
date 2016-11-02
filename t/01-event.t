@@ -20,9 +20,7 @@ BEGIN {
 my $event;
 
 lives_ok {
-    $event = Navel::Event->new(
-        collection => 'test'
-    );
+    $event = Navel::Event->new();
 } 'making the event';
 
 lives_ok {
