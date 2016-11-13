@@ -35,7 +35,7 @@ my $encode_sereal_constructor = encode_sereal_constructor;
 sub deserialize {
     my ($class, $event) = (shift, $decode_sereal_constructor->decode(shift));
 
-    croak('event must be a array') unless ref $event eq 'ARRAY';
+    croak('event must be a ARRAY reference') unless ref $event eq 'ARRAY';
 
     $class->new(
         status => $event->[I_STATUS],
