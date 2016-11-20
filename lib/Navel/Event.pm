@@ -10,9 +10,9 @@ package Navel::Event 0.1;
 use Navel::Base;
 
 use constant {
-    I_STATUS => 0,
-    I_TIME => 1,
-    I_CLASS => 2,
+    I_TIME => 0,
+    I_CLASS => 1,
+    I_ID => 2,
     I_DATA => 3
 };
 
@@ -20,6 +20,7 @@ use Navel::Event::Status;
 use Navel::Utils qw/
     croak
     :sereal
+    :json
     blessed
     isint
  /;
@@ -27,8 +28,9 @@ use Navel::Utils qw/
 #-> class variables
 
 my $decode_sereal_constructor = decode_sereal_constructor;
-
 my $encode_sereal_constructor = encode_sereal_constructor;
+
+my $json_constructor = json_constructor;
 
 #-> methods
 
@@ -38,10 +40,10 @@ sub deserialize {
     croak('event must be a ARRAY reference') unless ref $event eq 'ARRAY';
 
     $class->new(
-        status => $event->[I_STATUS],
         time => $event->[I_TIME],
         class => $event->[I_CLASS],
-        data => $event->[I_DATA]
+        id => $event->[I_ID],
+        data => $json_constructor->decode($event->[I_DATA])
     );
 }
 
@@ -49,9 +51,9 @@ sub new {
     my ($class, %options) = @_;
 
     bless {
-        status => blessed($options{status}) && $options{status}->isa('Navel::Event::Status') ? $options{status} : Navel::Event::Status->new(delete $options{status}),
         time => isint($options{time}) ? $options{time} : time,
         class => $options{class},
+        id => $options{id} // croak('id must be defined'),
         data => $options{data}
     }, ref $class || $class;
 }
@@ -61,10 +63,10 @@ sub serialize {
 
     my @event;
 
-    $event[I_STATUS] = $self->{status}->{value};
     $event[I_TIME] = $self->{time};
     $event[I_CLASS] = $self->{class};
-    $event[I_DATA] = $self->{data};
+    $event[I_ID] = $self->{id};
+    $event[I_DATA] = $json_constructor->encode($self->{data});
 
     $encode_sereal_constructor->encode(\@event);
 }

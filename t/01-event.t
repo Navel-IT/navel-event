@@ -20,7 +20,9 @@ BEGIN {
 my $event;
 
 lives_ok {
-    $event = Navel::Event->new();
+    $event = Navel::Event->new(
+        id => '0'
+    );
 } 'making the event';
 
 lives_ok {
