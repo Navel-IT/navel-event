@@ -16,12 +16,10 @@ use constant {
     I_DATA => 3
 };
 
-use Navel::Event::Status;
 use Navel::Utils qw/
     croak
     :sereal
     :json
-    blessed
     isint
  /;
 
