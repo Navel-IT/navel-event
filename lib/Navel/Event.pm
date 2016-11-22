@@ -1,11 +1,11 @@
 # Copyright (C) 2015-2016 Yoann Le Garff, Nicolas Boquet and Yann Le Bras
-# navel-notification is licensed under the Apache License, Version 2.0
+# navel-event is licensed under the Apache License, Version 2.0
 
 #-> BEGIN
 
 #-> initialization
 
-package Navel::Notification 0.1;
+package Navel::Event 0.1;
 
 use Navel::Base;
 
@@ -19,22 +19,18 @@ use constant {
 
 use Navel::Utils qw/
     croak
-    :sereal
     :json
     isint
  /;
 
 #-> class variables
 
-my $decode_sereal_constructor = decode_sereal_constructor;
-my $encode_sereal_constructor = encode_sereal_constructor;
-
 my $json_constructor = json_constructor;
 
 #-> methods
 
 sub deserialize {
-    my ($class, $event) = (shift, $decode_sereal_constructor->decode(shift));
+    my ($class, $event) = (shift, $json_constructor->decode(shift));
 
     croak('event must be a ARRAY reference') unless ref $event eq 'ARRAY';
 
@@ -43,7 +39,7 @@ sub deserialize {
         class => $event->[I_CLASS],
         id => $event->[I_ID],
         description => $event->[I_DESCRIPTION],
-        data => $json_constructor->decode($event->[I_DATA])
+        data => $event->[I_DATA]
     );
 }
 
@@ -68,9 +64,9 @@ sub serialize {
     $event[I_CLASS] = $self->{class};
     $event[I_ID] = $self->{id};
     $event[I_DESCRIPTION] = $self->{description};
-    $event[I_DATA] = $json_constructor->encode($self->{data});
+    $event[I_DATA] = $self->{data};
 
-    $encode_sereal_constructor->encode(\@event);
+    $json_constructor->encode(\@event);
 }
 
 # sub AUTOLOAD {}
