@@ -1,11 +1,11 @@
 # Copyright (C) 2015-2016 Yoann Le Garff, Nicolas Boquet and Yann Le Bras
-# navel-event is licensed under the Apache License, Version 2.0
+# navel-notification is licensed under the Apache License, Version 2.0
 
 #-> BEGIN
 
 #-> initialization
 
-package Navel::Event 0.1;
+package Navel::Notification 0.1;
 
 use Navel::Base;
 
@@ -13,7 +13,8 @@ use constant {
     I_TIME => 0,
     I_CLASS => 1,
     I_ID => 2,
-    I_DATA => 3
+    I_DESCRIPTION => 3,
+    I_DATA => 4
 };
 
 use Navel::Utils qw/
@@ -41,6 +42,7 @@ sub deserialize {
         time => $event->[I_TIME],
         class => $event->[I_CLASS],
         id => $event->[I_ID],
+        description => $event->[I_DESCRIPTION],
         data => $json_constructor->decode($event->[I_DATA])
     );
 }
@@ -52,6 +54,7 @@ sub new {
         time => isint($options{time}) ? $options{time} : time,
         class => $options{class},
         id => $options{id} // croak('id must be defined'),
+        description => $options{description},
         data => $options{data}
     }, ref $class || $class;
 }
@@ -64,6 +67,7 @@ sub serialize {
     $event[I_TIME] = $self->{time};
     $event[I_CLASS] = $self->{class};
     $event[I_ID] = $self->{id};
+    $event[I_DESCRIPTION] = $self->{description};
     $event[I_DATA] = $json_constructor->encode($self->{data});
 
     $encode_sereal_constructor->encode(\@event);
@@ -93,6 +97,6 @@ Copyright (C) 2015-2016 Yoann Le Garff, Nicolas Boquet and Yann Le Bras
 
 =head1 LICENSE
 
-navel-event is licensed under the Apache License, Version 2.0
+navel-notification is licensed under the Apache License, Version 2.0
 
 =cut
