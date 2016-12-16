@@ -21,7 +21,6 @@ my $event;
 
 lives_ok {
     $event = Navel::Event->new(
-        class => 't',
         id => 't'
     );
 } 'making the event';
