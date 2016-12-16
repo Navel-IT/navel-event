@@ -48,7 +48,7 @@ sub new {
 
     bless {
         time => isint($options{time}) ? $options{time} : time,
-        class => $options{class},
+        class => $options{class} // croak('class must be defined'),
         id => $options{id} // croak('id must be defined'),
         description => $options{description},
         data => $options{data}
